@@ -1,0 +1,23 @@
+{
+  "name": "wayfarer-trip-planner",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "server": "node server/index.js",
+    "start": "concurrently \"npm:server\" \"npm:dev\""
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "concurrently": "latest",
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "groq-sdk": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "vite": "latest",
+    "wayfarer-trip-planner": "file:"
+  }
+}
