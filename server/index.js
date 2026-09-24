@@ -56,15 +56,16 @@ const tripSchema = {
 
 app.post('/api/generate', async (req, res) => {
   const { from, to, days, style, mode, regenerateTheme } = req.body || {};
-  if (!from?.trim() || !to?.trim() || !Number.isInteger(Number(days)) || Number(days) < 1 || Number(days) > 14 || !style) {
-    return res.status(400).json({ error: 'Please enter a starting location, destination, trip length, and travel style.' });
+  if ((mode === 'route' && !from?.trim()) || !to?.trim() || !Number.isInteger(Number(days)) || Number(days) < 1 || Number(days) > 14 || !style) {
+    return res.status(400).json({ error: 'Please enter a destination, trip length, and travel style. Route trips also need a starting location.' });
   }
   if (!process.env.GROQ_API_KEY) {
     return res.status(503).json({ error: 'Add GROQ_API_KEY to your .env file, then restart the server.' });
   }
   try {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-    const prompt = 'Create a realistic itinerary from ' + from + ' to ' + to + '. The trip lasts ' + days + ' days and has a ' + style + ' style. Focus on ' + (mode === 'route' ? 'places along the route' : 'places at the destination') + '. Return exactly ' + days + ' day(s), with at least three stops per day. All IDs must be strings such as "day-1" and "stop-1-1". Every stop needs a concise description and practical tip. Keep all text fields as strings. ' + (regenerateTheme ? 'Regenerate one day around the theme "' + regenerateTheme + '" and return exactly one day.' : '');
+    const tripRoute = mode === 'route' ? 'from ' + from + ' to ' + to : 'in ' + to;
+    const prompt = 'Create a realistic itinerary ' + tripRoute + '. The trip lasts ' + days + ' days and has a ' + style + ' style. Focus on ' + (mode === 'route' ? 'places along the route' : 'places at the destination') + '. Return exactly ' + days + ' day(s), with at least three stops per day. All IDs must be strings such as "day-1" and "stop-1-1". Every stop needs a concise description and practical tip. Keep all text fields as strings. ' + (regenerateTheme ? 'Regenerate one day around the theme "' + regenerateTheme + '" and return exactly one day.' : '');
     const completion = await groq.chat.completions.create({
       model: 'openai/gpt-oss-120b',
       messages: [{ role: 'user', content: 'You are a careful travel planner. Follow the required output format exactly. ' + prompt }],
