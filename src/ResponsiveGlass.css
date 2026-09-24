@@ -1,0 +1,173 @@
+/* Premium Frosted Glass Effects */
+
+.form-card {
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 32px;
+  
+  /* The core glassmorphism effect */
+  backdrop-filter: blur(32px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(180%) !important;
+  
+  /* Inner highlights to simulate 3D glass thickness */
+  box-shadow: 
+    0 32px 80px rgba(0, 0, 0, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+.stop-modal, .stop-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08), inset 0 1px 1px var(--glass-highlight);
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+.app.dark .form-card {
+  background: rgba(15, 23, 42, 0.4) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2) !important;
+}
+
+/* Form Layout inside the Glass Card */
+.mode-switch {
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 6px;
+  margin-bottom: 32px;
+}
+
+.mode-switch button {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: 0.3s ease;
+}
+
+.mode-switch button.active {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.form-grid input, .form-grid select {
+  height: 52px;
+  padding: 0 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.form-grid input:focus, .form-grid select:focus {
+  background: white !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 4px var(--primary-glow) !important;
+}
+
+.field-label {
+  margin-top: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1px;
+}
+
+/* Chips (Travel Style selection) */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 32px;
+}
+
+.chips button {
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  font-weight: 600;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  transition: 0.2s;
+}
+
+.chips button.selected {
+  background: var(--gradient);
+  border-color: transparent;
+  box-shadow: 0 4px 16px var(--primary-glow);
+}
+
+/* Generating Button */
+.generate-button {
+  width: 100%;
+  padding: 18px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--gradient);
+  border: none;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 12px 32px var(--primary-glow), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.generate-button:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: skewX(-20deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  20% { left: 200%; }
+  100% { left: 200%; }
+}

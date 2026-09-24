@@ -14,10 +14,12 @@
     "cors": "latest",
     "dotenv": "latest",
     "express": "latest",
+    "framer-motion": "^13.4.3",
     "groq-sdk": "latest",
+    "lucide-react": "^1.48.0",
     "react": "latest",
     "react-dom": "latest",
-    "vite": "latest",
-    "wayfarer-trip-planner": "file:"
+    "react-router-dom": "^7.18.4",
+    "vite": "latest"
   }
 }
