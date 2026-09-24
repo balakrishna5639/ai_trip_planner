@@ -19,7 +19,7 @@ app.post('/api/generate', async (req, res) => {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
     const prompt = 'Return only valid JSON matching this shape: {trip:{title,destination,duration,travelStyle,days:[{id,date,theme,totalDuration,stops:[{id,time,name,description,duration,type,tips}]}]}}. Stop type must be culture, food, nature, leisure, or adventure. Create realistic suggestions, concise descriptions and practical tips, with at least 3 stops per day. Trip details: from ' + from + ' to ' + to + ', ' + days + ' days, style ' + style + ', ' + (mode === 'route' ? 'places along the route' : 'destination places') + '. ' + (regenerateTheme ? 'Regenerate one day inspired by this theme: ' + regenerateTheme + '. Return one day only.' : '');
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      model: 'openai/gpt-oss-120b',
       messages: [
         { role: 'system', content: 'You are a careful travel planner. Return JSON only.' },
         { role: 'user', content: prompt },
