@@ -7,6 +7,53 @@ const app = express();
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json({ limit: '20kb' }));
 
+const textField = { type: 'string' };
+const stopSchema = {
+  type: 'object',
+  properties: {
+    id: textField,
+    time: textField,
+    name: textField,
+    description: textField,
+    duration: textField,
+    type: { type: 'string', enum: ['culture', 'food', 'nature', 'leisure', 'adventure'] },
+    tips: textField,
+  },
+  required: ['id', 'time', 'name', 'description', 'duration', 'type', 'tips'],
+  additionalProperties: false,
+};
+const daySchema = {
+  type: 'object',
+  properties: {
+    id: textField,
+    date: textField,
+    theme: textField,
+    totalDuration: textField,
+    stops: { type: 'array', items: stopSchema },
+  },
+  required: ['id', 'date', 'theme', 'totalDuration', 'stops'],
+  additionalProperties: false,
+};
+const tripSchema = {
+  type: 'object',
+  properties: {
+    trip: {
+      type: 'object',
+      properties: {
+        title: textField,
+        destination: textField,
+        duration: textField,
+        travelStyle: textField,
+        days: { type: 'array', items: daySchema },
+      },
+      required: ['title', 'destination', 'duration', 'travelStyle', 'days'],
+      additionalProperties: false,
+    },
+  },
+  required: ['trip'],
+  additionalProperties: false,
+};
+
 app.post('/api/generate', async (req, res) => {
   const { from, to, days, style, mode, regenerateTheme } = req.body || {};
   if (!from?.trim() || !to?.trim() || !Number.isInteger(Number(days)) || Number(days) < 1 || Number(days) > 14 || !style) {
@@ -17,14 +64,21 @@ app.post('/api/generate', async (req, res) => {
   }
   try {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
-    const prompt = 'Return only valid JSON matching this shape: {trip:{title,destination,duration,travelStyle,days:[{id,date,theme,totalDuration,stops:[{id,time,name,description,duration,type,tips}]}]}}. Stop type must be culture, food, nature, leisure, or adventure. Create realistic suggestions, concise descriptions and practical tips, with at least 3 stops per day. Trip details: from ' + from + ' to ' + to + ', ' + days + ' days, style ' + style + ', ' + (mode === 'route' ? 'places along the route' : 'destination places') + '. ' + (regenerateTheme ? 'Regenerate one day inspired by this theme: ' + regenerateTheme + '. Return one day only.' : '');
+    const prompt = 'Create a realistic itinerary from ' + from + ' to ' + to + '. The trip lasts ' + days + ' days and has a ' + style + ' style. Focus on ' + (mode === 'route' ? 'places along the route' : 'places at the destination') + '. Return exactly ' + days + ' day(s), with at least three stops per day. All IDs must be strings such as "day-1" and "stop-1-1". Every stop needs a concise description and practical tip. Keep all text fields as strings. ' + (regenerateTheme ? 'Regenerate one day around the theme "' + regenerateTheme + '" and return exactly one day.' : '');
     const completion = await groq.chat.completions.create({
       model: 'openai/gpt-oss-120b',
       messages: [
         { role: 'system', content: 'You are a careful travel planner. Return JSON only.' },
         { role: 'user', content: prompt },
       ],
-      response_format: { type: 'json_object' },
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: 'trip_itinerary',
+          strict: true,
+          schema: tripSchema,
+        },
+      },
       temperature: 0.7,
       max_tokens: 4000,
     });
@@ -36,8 +90,8 @@ app.post('/api/generate', async (req, res) => {
     }
     return res.json(parsed);
   } catch (error) {
-    console.error('Trip generation failed:', error.message);
-    return res.status(502).json({ error: 'We could not reach the trip planner. Please try again.' });
+    console.error('Trip generation failed:', error.status || 'no status', error.code || 'no code');
+    return res.status(502).json({ error: 'The trip planner could not create a complete itinerary. Please try again.' });
   }
 });
 
