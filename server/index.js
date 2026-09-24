@@ -67,10 +67,7 @@ app.post('/api/generate', async (req, res) => {
     const prompt = 'Create a realistic itinerary from ' + from + ' to ' + to + '. The trip lasts ' + days + ' days and has a ' + style + ' style. Focus on ' + (mode === 'route' ? 'places along the route' : 'places at the destination') + '. Return exactly ' + days + ' day(s), with at least three stops per day. All IDs must be strings such as "day-1" and "stop-1-1". Every stop needs a concise description and practical tip. Keep all text fields as strings. ' + (regenerateTheme ? 'Regenerate one day around the theme "' + regenerateTheme + '" and return exactly one day.' : '');
     const completion = await groq.chat.completions.create({
       model: 'openai/gpt-oss-120b',
-      messages: [
-        { role: 'system', content: 'You are a careful travel planner. Return JSON only.' },
-        { role: 'user', content: prompt },
-      ],
+      messages: [{ role: 'user', content: 'You are a careful travel planner. Follow the required output format exactly. ' + prompt }],
       response_format: {
         type: 'json_schema',
         json_schema: {
@@ -80,7 +77,9 @@ app.post('/api/generate', async (req, res) => {
         },
       },
       temperature: 0.7,
-      max_tokens: 4000,
+      reasoning_format: 'hidden',
+      reasoning_effort: 'low',
+      max_completion_tokens: 4000,
     });
     const content = completion.choices?.[0]?.message?.content;
     if (!content?.trim()) return res.status(502).json({ error: 'The planner returned an empty response.' });
@@ -90,7 +89,17 @@ app.post('/api/generate', async (req, res) => {
     }
     return res.json(parsed);
   } catch (error) {
-    console.error('Trip generation failed:', error.status || 'no status', error.code || 'no code');
+    const providerError = error.error || {};
+    // Keep diagnostics useful without logging Groq's full failed_generation payload.
+    console.error('Trip generation failed:', JSON.stringify({
+      status: error.status || null,
+      code: providerError.code || error.code || null,
+      type: providerError.type || error.type || null,
+      param: providerError.param || error.param || null,
+      message: typeof providerError.message === 'string'
+        ? providerError.message
+        : (error.message || '').slice(0, 300),
+    }));
     return res.status(502).json({ error: 'The trip planner could not create a complete itinerary. Please try again.' });
   }
 });
