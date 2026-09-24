@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { generateTrip } from './lib/api.js';
 import './AppExtra.css';
+import './Cinematic.css';
 
 const initialForm = { from: '', to: '', days: 3, style: 'Adventure', mode: 'destination' };
 const styles = ['Adventure', 'Relaxation', 'Cultural', 'Budget', 'Luxury'];
