@@ -163,6 +163,23 @@
   /* Reduced from 80px to fix emptiness */
 }
 
+/* Error State Overrides */
+.error-state {
+  max-width: 600px !important;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60px;
+}
+.error-state .generate-button {
+  max-width: 300px;
+  margin-top: 24px;
+}
+.error-state .warning {
+  margin-bottom: 24px;
+}
+
 /* Footnote styling */
 .footnote {
   text-align: center;
