@@ -52,12 +52,16 @@ export default function Hero({ form, setForm, generate }) {
               <label>TO
                 <input required value={form.to} onChange={(e) => setForm({ ...form, to: e.target.value })} placeholder="Where to?"/>
               </label>
-              <label>DURATION
-                <select value={form.days} onChange={(e) => setForm({ ...form, days: Number(e.target.value) })}>
-                  {Array.from({ length: 14 }, (_, i) => (
-                    <option key={i} value={i + 1}>{i + 1} {i === 0 ? 'day' : 'days'}</option>
-                  ))}
-                </select>
+              <label>DURATION (DAYS)
+                <input 
+                  type="number" 
+                  min="1" 
+                  max="30" 
+                  required 
+                  value={form.days} 
+                  onChange={(e) => setForm({ ...form, days: Math.max(1, Number(e.target.value) || 1) })} 
+                  placeholder="e.g. 5"
+                />
               </label>
             </div>
             

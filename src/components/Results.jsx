@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Share, ArrowLeft, Plus, RefreshCw, X } from 'lucide-react';
+import { Share, ArrowLeft, Plus, RefreshCw, X, Calendar } from 'lucide-react';
 import StopCard from './StopCard';
+import MapWrapper from './MapWrapper';
 
-export default function Results({ trip, activeDay, setActiveDay, notice, setNotice, setPage, shareTrip, regenerateDay, setShowAddStop, editStop, moveStop, deleteStop }) {
+export default function Results({ trip, coords, activeDay, setActiveDay, notice, setNotice, setPage, shareTrip, regenerateDay, setShowAddStop, editStop, moveStop, deleteStop }) {
   const currentDay = trip.days[activeDay];
 
   return (
@@ -30,6 +31,8 @@ export default function Results({ trip, activeDay, setActiveDay, notice, setNoti
           </button>
         </div>
       </header>
+
+      <MapWrapper coords={coords} destination={trip.destination} stops={currentDay.stops} />
 
       <AnimatePresence>
         {notice && (
@@ -84,7 +87,7 @@ export default function Results({ trip, activeDay, setActiveDay, notice, setNoti
                 <small>DAY {String(activeDay + 1).padStart(2, '0')}</small>
                 <h2>{currentDay.theme}</h2>
               </div>
-              <span>◷ &nbsp;{currentDay.totalDuration}</span>
+              <span>◷ &nbsp;{currentDay.totalDuration} &nbsp; | &nbsp; 💰 {currentDay.totalCost || 'Free'}</span>
             </header>
 
             {currentDay.stops.length === 0 ? (

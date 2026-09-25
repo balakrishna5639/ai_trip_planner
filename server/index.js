@@ -18,8 +18,11 @@ const stopSchema = {
     duration: textField,
     type: { type: 'string', enum: ['culture', 'food', 'nature', 'leisure', 'adventure'] },
     tips: textField,
+    cost: textField,
+    lat: { type: ['number', 'null'] },
+    lng: { type: ['number', 'null'] },
   },
-  required: ['id', 'time', 'name', 'description', 'duration', 'type', 'tips'],
+  required: ['id', 'time', 'name', 'description', 'duration', 'type', 'tips', 'cost', 'lat', 'lng'],
   additionalProperties: false,
 };
 const daySchema = {
@@ -65,7 +68,7 @@ app.post('/api/generate', async (req, res) => {
   try {
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
     const tripRoute = mode === 'route' ? 'from ' + from + ' to ' + to : 'in ' + to;
-    const prompt = 'Create a realistic itinerary ' + tripRoute + '. The trip lasts ' + days + ' days and has a ' + style + ' style. Focus on ' + (mode === 'route' ? 'places along the route' : 'places at the destination') + '. Return exactly ' + days + ' day(s), with at least three stops per day. All IDs must be strings such as "day-1" and "stop-1-1". Every stop needs a concise description and practical tip. Keep all text fields as strings. IMPORTANT: You must return a JSON object with a single "trip" key. The "trip" object must include "title", "destination", "duration", "travelStyle", and "days" array. ' + (regenerateTheme ? 'Regenerate one day around the theme "' + regenerateTheme + '" and return exactly one day.' : '');
+    const prompt = 'Create a realistic itinerary ' + tripRoute + '. The trip lasts ' + days + ' days and has a ' + style + ' style. Focus on ' + (mode === 'route' ? 'places along the route' : 'places at the destination') + '. Return exactly ' + days + ' day(s), with at least three stops per day. CRITICAL ROUTING INSTRUCTION: Geographically cluster the stops for each day so they are in the same neighborhood or area. Order the stops chronologically so they form a logical, highly efficient walking or driving route with minimal travel time between consecutive stops. Do not jump back and forth across the city. Also, strongly consider typical opening and closing hours (e.g., do not schedule museums at 8 PM or cafes at 6 AM). All IDs must be strings such as "day-1" and "stop-1-1". Every stop needs a concise description, a practical tip, and an estimated cost string in INR (e.g. "₹500", "Free"). You must provide a reasonable estimated cost in INR for every stop; only return "Price not found" if completely impossible. Also include the latitude (lat) and longitude (lng) of the stop as numbers (or null if you absolutely cannot find them). Keep all text fields as strings. IMPORTANT: You must return a JSON object with a single "trip" key. The "trip" object must include "title", "destination", "duration", "travelStyle", and "days" array. ' + (regenerateTheme ? 'Regenerate one day around the theme "' + regenerateTheme + '" and return exactly one day.' : '');
     const completion = await groq.chat.completions.create({
       model: 'openai/gpt-oss-120b',
       messages: [{ role: 'user', content: 'You are a careful travel planner. Follow the required output format exactly. ' + prompt }],

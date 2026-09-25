@@ -86,7 +86,7 @@
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.8) !important;
   border: 1px solid rgba(255, 255, 255, 0.9) !important;
-  color: var(--ink);
+  color: #0F172A !important;
   font-weight: 600;
   font-size: 15px;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
@@ -98,6 +98,18 @@
   background: white !important;
   border-color: var(--primary) !important;
   box-shadow: 0 0 0 4px var(--primary-glow) !important;
+}
+
+.app.dark .form-grid input, .app.dark .form-grid select {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.app.dark .form-grid input:focus, .app.dark .form-grid select:focus {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border-color: var(--primary) !important;
 }
 
 .field-label {
@@ -170,4 +182,35 @@
   0% { left: -100%; }
   20% { left: 200%; }
   100% { left: 200%; }
+}
+
+@media (max-width: 768px) {
+  .form-card {
+    padding: 24px;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .destination-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .features {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .feature {
+    align-items: center;
+    text-align: center;
+  }
+  .hero-copy h1 {
+    font-size: clamp(32px, 8vw, 48px);
+  }
+  .hero-scene {
+    padding: 20px 10px;
+  }
+  .navbar {
+    padding: 0 5vw;
+  }
 }

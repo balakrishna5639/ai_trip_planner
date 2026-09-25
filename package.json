@@ -16,9 +16,11 @@
     "express": "latest",
     "framer-motion": "^13.4.3",
     "groq-sdk": "latest",
+    "leaflet": "^1.9.4",
     "lucide-react": "^1.48.0",
     "react": "latest",
     "react-dom": "latest",
+    "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.18.4",
     "vite": "latest"
   }

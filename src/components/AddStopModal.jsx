@@ -35,7 +35,7 @@ export default function AddStopModal({ newStop, setNewStop, setShowAddStop, addS
           <label>PLACE NAME
             <input autoFocus required value={newStop.name} onChange={(e) => setNewStop({ ...newStop, name: e.target.value })} placeholder="e.g. A quiet café by the river" />
           </label>
-          <div className="modal-row">
+          <div className="modal-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
             <label>TIME
               <TimePicker 
                 value={newStop.time} 
@@ -44,6 +44,9 @@ export default function AddStopModal({ newStop, setNewStop, setShowAddStop, addS
             </label>
             <label>DURATION
               <input required value={newStop.duration} onChange={(e) => setNewStop({ ...newStop, duration: e.target.value })} placeholder="1 hour" />
+            </label>
+            <label>COST
+              <input value={newStop.cost || '$0'} onChange={(e) => setNewStop({ ...newStop, cost: e.target.value })} placeholder="$10" />
             </label>
           </div>
           <label>TYPE

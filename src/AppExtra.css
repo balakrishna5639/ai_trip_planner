@@ -1,20 +1,26 @@
 /* Absolute Edge-to-Edge Layout */
 
 .navbar {
-  position: absolute;
-  /* Make it float over the hero */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 50;
+  z-index: 100;
   height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 5vw;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+  background: rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+  transition: all 0.3s ease;
+}
+
+.app.dark .navbar {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
 }
 
 .brand {
@@ -603,6 +609,33 @@
   box-shadow: 0 24px 48px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.1);
 }
 
+/* Custom Map Tooltips */
+.custom-map-tooltip {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 12px !important;
+  padding: 6px 12px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(8px);
+}
+
+.custom-map-tooltip::before {
+  border-top-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.app.dark .custom-map-tooltip {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
+
+.app.dark .custom-map-tooltip::before {
+  border-top-color: rgba(15, 23, 42, 0.9) !important;
+}
+
 .time-col {
   display: flex;
   flex-direction: column;
@@ -788,7 +821,7 @@
 
 .app.dark .day-actions button:first-child {
   background: white;
-  color: var(--ink);
+  color: #0F172A;
 }
 
 .day-actions button:last-child {
@@ -813,23 +846,25 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
-  z-index: 100;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 16px;
 }
 
 .stop-modal {
   position: relative;
   width: 100%;
   max-width: 500px;
-  padding: 40px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   background: rgba(255, 255, 255, 0.85);
-  border-radius: 32px;
+  border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 32px 80px rgba(0, 0, 0, 0.15), inset 0 1px 2px rgba(255, 255, 255, 1);
 }
@@ -989,4 +1024,24 @@
 
 .results-footer span {
   color: var(--primary);
+}
+@media (max-width: 900px) {
+  .day-actions {
+    flex-direction: column;
+  }
+  .trip-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-top: 80px;
+    padding-bottom: 40px;
+  }
+  .hero-scene {
+    height: auto;
+    min-height: 100vh;
+  }
 }
