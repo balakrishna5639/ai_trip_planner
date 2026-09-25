@@ -23,8 +23,7 @@ export default function DestinationGrid({ setForm }) {
   const features = [
     { icon: <Sparkles size={24} />, title: 'AI-powered itineraries', desc: 'Thoughtful plans, made around you' },
     { icon: <Edit3 size={24} />, title: 'Fully editable', desc: 'Make every detail yours' },
-    { icon: <Compass size={24} />, title: 'Smart suggestions', desc: 'Find your local gems' },
-    { icon: <Share2 size={24} />, title: 'Save & share', desc: 'Keep the plan close' }
+    { icon: <Compass size={24} />, title: 'Smart suggestions', desc: 'Find your local gems' }
   ];
 
   return (

@@ -32,7 +32,16 @@ export default function StopCard({ stop, index, totalStops, editStop, moveStop, 
             value={stop.time} 
             onChange={(val) => editStop(index, 'time', val)} 
           />
-          <span className="duration-badge">◷ &nbsp;{stop.duration}</span>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <span className="duration-badge">◷ &nbsp;{stop.duration}</span>
+            <input 
+              className="duration-badge" 
+              style={{ border: 'none', width: '110px', outline: 'none', cursor: 'text' }}
+              value={stop.cost ?? 'Price not found'}
+              onChange={(e) => editStop(index, 'cost', e.target.value)}
+              aria-label="Cost"
+            />
+          </div>
         </div>
         
         <input 
@@ -45,8 +54,19 @@ export default function StopCard({ stop, index, totalStops, editStop, moveStop, 
         <textarea 
           aria-label="Stop description" 
           value={stop.description} 
-          rows="2" 
-          onChange={(e) => editStop(index, 'description', e.target.value)}
+          rows="1" 
+          style={{ overflow: 'hidden' }}
+          ref={(el) => {
+            if (el) {
+              el.style.height = 'auto';
+              el.style.height = el.scrollHeight + 'px';
+            }
+          }}
+          onChange={(e) => {
+            e.target.style.height = 'auto';
+            e.target.style.height = e.target.scrollHeight + 'px';
+            editStop(index, 'description', e.target.value);
+          }}
         />
         
         <div className="stop-bottom">
