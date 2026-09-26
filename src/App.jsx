@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { Analytics } from '@vercel/analytics/react';
 import { generateTrip } from './lib/api.js';
 
 // Components
@@ -221,6 +222,7 @@ export default function App() {
 
   return (
     <div className={dark ? 'app dark' : 'app'}>
+      <Analytics />
       <Navbar dark={dark} setDark={setDark} page={page} setPage={setPage} />
       
       <AnimatePresence mode="wait">
